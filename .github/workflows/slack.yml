@@ -1,0 +1,31 @@
+name: Slack Message Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Message to send to Slack'
+        required: true
+        type: string
+      channel_id:
+        description: 'Slack Channel ID'
+        required: true
+        type: string
+      token:
+        description: 'Slack Bot Token'
+        required: true
+        type: string
+
+jobs:
+  send-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send message to Slack
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          method: chat.postMessage
+          token: ${{ github.event.inputs.token }}
+          payload: |
+            channel: ${{ github.event.inputs.channel_id }}
+            text: ${{ github.event.inputs.message }}
+
